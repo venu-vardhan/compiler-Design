@@ -22,7 +22,7 @@ void main()
     printf("Sum of all even numbers = %d\n", even_sum);
 }
 <h1>Two sum Problem </h1>
-#include <stdbool.h>
+<p>#include <stdbool.h>
 #include <stdio.h>
 
 bool twoSum(int arr[], int n, int target){
@@ -56,6 +56,26 @@ int main(){
         printf("true\n");
     else
         printf("false\n");
-  
     return 0;
+}</p>
+<br>
+<h1>palindrome Number</h1>
+<p>#include <stdbool.h>
+
+bool isPalindrome(int x) {
+    if (x < 0) {
+        return false;
+    }
+
+    int original = x;
+    int reverse = 0;
+
+    while (x > 0) {
+        int digit = x % 10;
+        reverse = reverse * 10 + digit;
+        x = x / 10;
+    }
+
+    return original == reverse;
 }
+</p>
