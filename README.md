@@ -125,4 +125,55 @@ int maxLevelSum(struct TreeNode* root) {
     
     return answerLevel;
 }
+<h1>
+ Maximum Product of Splitted Binary Tree
+</h1>
+<p>
+ #include <stdio.h>
+#include <stdlib.h>
 
+#define MOD 1000000007
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+
+long long totalSum = 0;
+long long maxProduct = 0;
+
+/* First DFS: calculate total sum */
+long long getTotalSum(struct TreeNode* root) {
+    if (root == NULL)
+        return 0;
+
+    return root->val 
+         + getTotalSum(root->left) 
+         + getTotalSum(root->right);
+}
+
+/* Second DFS: calculate subtree sums and max product */
+long long dfs(struct TreeNode* root) {
+    if (root == NULL)
+        return 0;
+
+    long long leftSum = dfs(root->left);
+    long long rightSum = dfs(root->right);
+
+    long long subTreeSum = root->val + leftSum + rightSum;
+
+    long long product = subTreeSum * (totalSum - subTreeSum);
+    if (product > maxProduct)
+        maxProduct = product;
+
+    return subTreeSum;
+}
+
+int maxProductSplit(struct TreeNode* root) {
+    totalSum = getTotalSum(root);
+    dfs(root);
+    return (int)(maxProduct % MOD);
+}
+
+</p>
