@@ -177,3 +177,60 @@ int maxProductSplit(struct TreeNode* root) {
 }
 
 </p>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define NEG_INF -1000000000
+
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int max3(int a, int b, int c) {
+    return max(a, max(b, c));
+}
+
+int maxDotProduct(int* nums1, int n, int* nums2, int m) {
+    int** dp = (int**)malloc((n + 1) * sizeof(int*));
+    for (int i = 0; i <= n; i++) {
+        dp[i] = (int*)malloc((m + 1) * sizeof(int));
+        for (int j = 0; j <= m; j++) {
+            dp[i][j] = NEG_INF;
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            int take = nums1[i - 1] * nums2[j - 1];
+            if (dp[i - 1][j - 1] > 0)
+                take += dp[i - 1][j - 1];
+
+            dp[i][j] = max3(
+                take,
+                dp[i - 1][j],
+                dp[i][j - 1]
+            );
+        }
+    }
+
+    int result = dp[n][m];
+
+    for (int i = 0; i <= n; i++)
+        free(dp[i]);
+    free(dp);
+
+    return result;
+}
+
+/* Example usage */
+int main() {
+    int nums1[] = {2, 1, -2, 5};
+    int nums2[] = {3, 0, -6};
+
+    int n = sizeof(nums1) / sizeof(nums1[0]);
+    int m = sizeof(nums2) / sizeof(nums2[0]);
+
+    printf("Maximum Dot Product = %d\n", maxDotProduct(nums1, n, nums2, m));
+    return 0;
+}
+
