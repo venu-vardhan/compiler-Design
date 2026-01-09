@@ -233,4 +233,44 @@ int main() {
     printf("Maximum Dot Product = %d\n", maxDotProduct(nums1, n, nums2, m));
     return 0;
 }
+<h1>Smallest Subtree with All the Deepest Nodes</h1>
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+struct Result {
+    int depth;
+    struct TreeNode* node;
+};
+
+struct Result dfs(struct TreeNode* root) {
+    if (root == NULL) {
+        struct Result r = {0, NULL};
+        return r;
+    }
+
+    struct Result left = dfs(root->left);
+    struct Result right = dfs(root->right);
+
+    if (left.depth > right.depth) {
+        struct Result r = {left.depth + 1, left.node};
+        return r;
+    }
+    if (right.depth > left.depth) {
+        struct Result r = {right.depth + 1, right.node};
+        return r;
+    }
+
+    struct Result r = {left.depth + 1, root};
+    return r;
+}
+
+struct TreeNode* subtreeWithAllDeepest(struct TreeNode* root) {
+    return dfs(root).node;
+}
 
