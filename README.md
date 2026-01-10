@@ -2,6 +2,7 @@
 <br>
 ##welcome 
 <h1>c program sum of odd and even numbers </h1>
+----*
 ```c-program 
 #include <stdio.h>
 void main()
