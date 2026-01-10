@@ -1,10 +1,9 @@
 # compiler-Design
 <br>
-welcome 
+##welcome 
 <h1>c program sum of odd and even numbers </h1>
-
+```c-program 
 #include <stdio.h>
- 
 void main()
 {
     int i, num, odd_sum = 0, even_sum = 0;
@@ -21,10 +20,11 @@ void main()
     printf("Sum of all odd numbers  = %d\n", odd_sum);
     printf("Sum of all even numbers = %d\n", even_sum);
 }
-<h1>Two sum Problem </h1>
-<p>#include <stdbool.h>
+<br>
+#Two sum Problem 
+``c-program
+#include <stdbool.h>
 #include <stdio.h>
-
 bool twoSum(int arr[], int n, int target){
 
     for (int i = 0; i < n; i++){
@@ -57,9 +57,10 @@ int main(){
     else
         printf("false\n");
     return 0;
-}</p>
+}
 <br>
-<h1>palindrome Number</h1>
+#palindrome Number
+``c-program 
 <p>#include <stdbool.h>
 
 bool isPalindrome(int x) {
