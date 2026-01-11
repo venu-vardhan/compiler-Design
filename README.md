@@ -286,5 +286,142 @@ struct Result dfs(struct TreeNode* root) {
 
 struct TreeNode* subtreeWithAllDeepest(struct TreeNode* root) {
     return dfs(root).node;
+} 
+#Below is a **ready-to-use `README.md` file content** for your **C implementation of Maximal Rectangle**.
+You can **copy-paste this directly into `README.md`** in your GitHub repo.
+
+---
+
+# 🟩 Maximal Rectangle in a Binary Matrix (C)
+
+This project implements an efficient solution to find the **largest rectangle containing only `1`s** in a binary matrix using **C language**.
+
+The solution is based on:
+
+* Converting each row into a **histogram**
+* Applying the **Largest Rectangle in Histogram** algorithm using a **stack**
+
+---
+
+## 📌 Problem Statement
+
+Given a `rows x cols` binary matrix filled with `'0'` and `'1'`, find the largest rectangle containing only `'1'`s and return its area.
+
+---
+
+## 🧠 Approach
+
+1. Iterate through each row of the matrix
+2. Maintain a `heights[]` array that represents histogram heights
+3. For each row:
+
+   * If the cell is `'1'`, increment height
+   * If the cell is `'0'`, reset height to `0`
+4. Compute the **largest rectangle area in histogram** using a stack
+5. Track and return the maximum area
+
+---
+
+## ⏱️ Complexity Analysis
+
+* **Time Complexity:** `O(rows × cols)`
+* **Space Complexity:** `O(cols)`
+
+---
+
+## ✅ C Implementation
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int largestRectangleArea(int* heights, int size) {
+    int* stack = (int*)malloc(sizeof(int) * (size + 1));
+    int top = -1;
+    int maxArea = 0;
+
+    for (int i = 0; i <= size; i++) {
+        int currHeight = (i == size) ? 0 : heights[i];
+
+        while (top != -1 && currHeight < heights[stack[top]]) {
+            int h = heights[stack[top--]];
+            int w = (top == -1) ? i : i - stack[top] - 1;
+            int area = h * w;
+            if (area > maxArea)
+                maxArea = area;
+        }
+        stack[++top] = i;
+    }
+
+    free(stack);
+    return maxArea;
 }
+
+int maximalRectangle(char** matrix, int matrixSize, int* matrixColSize) {
+    if (matrixSize == 0) return 0;
+
+    int cols = matrixColSize[0];
+    int* heights = (int*)calloc(cols, sizeof(int));
+    int maxArea = 0;
+
+    for (int i = 0; i < matrixSize; i++) {
+
+        // Build histogram
+        for (int j = 0; j < cols; j++) {
+            if (matrix[i][j] == '1')
+                heights[j]++;
+            else
+                heights[j] = 0;
+        }
+
+        // Find largest rectangle in histogram
+        int area = largestRectangleArea(heights, cols);
+        if (area > maxArea)
+            maxArea = area;
+    }
+
+    free(heights);
+    return maxArea;
+}
+```
+
+---
+
+## 🧪 Example
+
+**Input**
+
+```
+[
+ ["1","0","1","0","0"],
+ ["1","0","1","1","1"],
+ ["1","1","1","1","1"],
+ ["1","0","0","1","0"]
+]
+```
+
+**Output**
+
+```
+6
+```
+
+---
+
+## 🚀 Key Features
+
+✔ Efficient stack-based solution
+✔ Works for large matrices (up to 200×200)
+✔ LeetCode accepted approach
+✔ Clean and modular C code
+
+---
+
+## 📄 License
+
+This project is open-source and free to use for learning and academic purposes.
+
+---
+
+
 
