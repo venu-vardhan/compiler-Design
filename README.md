@@ -293,6 +293,135 @@ int largestRectangleArea(int* heights, int size) {
 
 ---
 
+```md
+# Minimum Time Visiting All Points (C)
+
+## 📌 Problem Statement
+
+On a 2D plane, there are `n` points with integer coordinates:
+
+```
+
+points[i] = [xi, yi]
+
+```
+
+You must visit **all points in the given order**.
+
+### ⏱ Movement Rules
+In **1 second**, you can:
+- Move **1 unit vertically**
+- Move **1 unit horizontally**
+- Move **diagonally** (1 unit vertically + 1 unit horizontally)
+
+You may pass through other points, but only visiting in order counts.
+
+---
+
+## 🧠 Key Observation
+
+To move from point `(x1, y1)` to `(x2, y2)`:
+
+- Horizontal distance = `|x2 - x1|`
+- Vertical distance = `|y2 - y1|`
+
+Using diagonal moves efficiently:
+
+```
+
+Minimum Time = max(|x2 - x1|, |y2 - y1|)
+
+````
+
+Diagonal moves reduce both distances in one second.
+
+---
+
+## 🧩 Algorithm
+
+1. Initialize `time = 0`
+2. Loop through consecutive points
+3. For each pair:
+   - Compute `dx = abs(x2 - x1)`
+   - Compute `dy = abs(y2 - y1)`
+   - Add `max(dx, dy)` to `time`
+4. Return `time`
+
+---
+
+## ✅ C Implementation
+
+```c
+#include <stdlib.h>
+
+int minTimeToVisitAllPoints(int** points, int pointsSize, int* pointsColSize) {
+    int time = 0;
+
+    for (int i = 1; i < pointsSize; i++) {
+        int x1 = points[i - 1][0];
+        int y1 = points[i - 1][1];
+        int x2 = points[i][0];
+        int y2 = points[i][1];
+
+        int dx = abs(x2 - x1);
+        int dy = abs(y2 - y1);
+
+        time += (dx > dy) ? dx : dy;
+    }
+
+    return time;
+}
+````
+
+---
+
+## 🧪 Example
+
+### Input
+
+```
+points = [[1,1],[3,4],[-1,0]]
+```
+
+### Output
+
+```
+7
+```
+
+### Explanation
+
+* Time from `[1,1] → [3,4]` = 3 seconds
+* Time from `[3,4] → [-1,0]` = 4 seconds
+* Total = **7 seconds**
+
+---
+
+## ⏱ Time & Space Complexity
+
+| Complexity | Value |
+| ---------- | ----- |
+| Time       | O(n)  |
+| Space      | O(1)  |
+
+---
+
+## 🏷 Tags
+
+* Greedy
+* Geometry
+* Array
+* Simulation
+
+---
+
+
+---
+
+
+```
+
+
 
 ## 📄 License
 
