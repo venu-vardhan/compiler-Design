@@ -420,6 +420,153 @@ points = [[1,1],[3,4],[-1,0]]
 
 
 ```
+Equal Area Line for Squares (C Program)
+
+This project solves the problem of finding the minimum y-coordinate of a horizontal line such that the total area of squares above the line equals the total area below the line.
+
+The solution is implemented in C using binary search and handles large constraints efficiently.
+
+🧩 Problem Description
+
+You are given a 2D integer array squares.
+
+Each square is represented as:
+
+squares[i] = [xi, yi, li]
+
+
+(xi, yi) → bottom-left coordinate of the square
+
+li → side length of the square
+
+Squares are axis-aligned (parallel to x-axis)
+
+Goal
+
+Find the minimum y-coordinate of a horizontal line such that:
+
+Total area above the line = Total area below the line
+
+Important Notes
+
+Squares may overlap
+
+Overlapping areas are counted multiple times
+
+Answers within 1e-5 precision are accepted
+
+🧠 Approach
+Key Observations
+
+For any horizontal line y = h, the area below the line increases monotonically
+
+This allows us to apply binary search on y
+
+For each square, area contribution depends on the position of h
+
+Strategy
+
+Calculate the total area of all squares
+
+Binary search on y between:
+
+Minimum bottom coordinate
+
+Maximum top coordinate
+
+For each midpoint:
+
+Compute the area below the line
+
+Compare with half of the total area
+
+Repeat until sufficient precision is reached
+
+🧮 Algorithm Complexity
+Metric	Complexity
+Time	O(n log R)
+Space	O(1)
+Precision	≤ 1e-5
+🧪 Example
+Input
+[[0, 0, 1], [2, 2, 1]]
+
+Output
+1.00000
+
+Input
+[[0, 0, 2], [1, 1, 1]]
+
+Output
+1.16667
+
+💻 C Implementation
+#include <stdio.h>
+#include <float.h>
+
+double areaBelow(double h, int squares[][3], int n) {
+    double area = 0.0;
+
+    for (int i = 0; i < n; i++) {
+        double y = squares[i][1];
+        double l = squares[i][2];
+        double top = y + l;
+
+        if (h <= y) {
+            continue;
+        } else if (h >= top) {
+            area += l * l;
+        } else {
+            area += l * (h - y);
+        }
+    }
+    return area;
+}
+
+double separateSquares(int squares[][3], int n) {
+    double totalArea = 0.0;
+    double low = DBL_MAX, high = 0.0;
+
+    for (int i = 0; i < n; i++) {
+        double y = squares[i][1];
+        double l = squares[i][2];
+        totalArea += l * l;
+        if (y < low) low = y;
+        if (y + l > high) high = y + l;
+    }
+
+    double target = totalArea / 2.0;
+
+    // Binary search
+    for (int i = 0; i < 80; i++) {
+        double mid = (low + high) / 2.0;
+        double below = areaBelow(mid, squares, n);
+
+        if (below < target) {
+            low = mid;
+        } else {
+            high = mid;
+        }
+    }
+
+    return low;
+}
+
+int main() {
+    int squares1[][3] = {{0, 0, 1}, {2, 2, 1}};
+    printf("%.5f\n", separateSquares(squares1, 2));
+
+    int squares2[][3] = {{0, 0, 2}, {1, 1, 1}};
+    printf("%.5f\n", separateSquares(squares2, 2));
+
+    return 0;
+}
+
+▶ How to Run
+gcc separate_squares.c -o separate_squares
+./separate_squares
+
+
 
 
 
