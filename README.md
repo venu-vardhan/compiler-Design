@@ -420,91 +420,53 @@ points = [[1,1],[3,4],[-1,0]]
 
 
 ```
-Equal Area Line for Squares (C Program)
+This error is **100% a syntax / structure issue**, not your algorithm 👍
+You’re very close.
 
-This project solves the problem of finding the minimum y-coordinate of a horizontal line such that the total area of squares above the line equals the total area below the line.
+---
 
-The solution is implemented in C using binary search and handles large constraints efficiently.
+## ❌ What This Error REALLY Means
 
-🧩 Problem Description
+```
+error: invalid storage class for function ‘__LC_get_cpu_time’
+```
 
-You are given a 2D integer array squares.
+👉 `__LC_get_cpu_time()` is **LeetCode’s internal function**.
+👉 This error happens **ONLY when your code accidentally breaks the file structure**.
 
-Each square is represented as:
+### 🚨 Root Cause
 
-squares[i] = [xi, yi, li]
+You are missing a **closing brace `}`** somewhere **before** your `separateSquares()` function ends.
 
+Because of that:
 
-(xi, yi) → bottom-left coordinate of the square
+* LeetCode’s internal function appears **inside your function**
+* C does NOT allow function definitions inside other functions
+* Compiler throws this error
 
-li → side length of the square
+---
 
-Squares are axis-aligned (parallel to x-axis)
+## ✅ How to Fix It (IMPORTANT)
 
-Goal
+### ✔️ Step 1: Make sure every `{` has a matching `}`
 
-Find the minimum y-coordinate of a horizontal line such that:
+Especially:
 
-Total area above the line = Total area below the line
+* `areaBelow(...)`
+* `separateSquares(...)`
+* No extra braces removed or added
 
-Important Notes
+---
 
-Squares may overlap
+## ✅ FULLY FIXED & SAFE CODE (COPY EXACTLY)
 
-Overlapping areas are counted multiple times
+👉 **Replace your entire submission with this** ⬇️
+(Do NOT add anything before or after)
 
-Answers within 1e-5 precision are accepted
-
-🧠 Approach
-Key Observations
-
-For any horizontal line y = h, the area below the line increases monotonically
-
-This allows us to apply binary search on y
-
-For each square, area contribution depends on the position of h
-
-Strategy
-
-Calculate the total area of all squares
-
-Binary search on y between:
-
-Minimum bottom coordinate
-
-Maximum top coordinate
-
-For each midpoint:
-
-Compute the area below the line
-
-Compare with half of the total area
-
-Repeat until sufficient precision is reached
-
-🧮 Algorithm Complexity
-Metric	Complexity
-Time	O(n log R)
-Space	O(1)
-Precision	≤ 1e-5
-🧪 Example
-Input
-[[0, 0, 1], [2, 2, 1]]
-
-Output
-1.00000
-
-Input
-[[0, 0, 2], [1, 1, 1]]
-
-Output
-1.16667
-
-💻 C Implementation
-#include <stdio.h>
+```c
 #include <float.h>
 
-double areaBelow(double h, int squares[][3], int n) {
+double areaBelow(double h, int** squares, int n) {
     double area = 0.0;
 
     for (int i = 0; i < n; i++) {
@@ -523,13 +485,14 @@ double areaBelow(double h, int squares[][3], int n) {
     return area;
 }
 
-double separateSquares(int squares[][3], int n) {
+double separateSquares(int** squares, int squaresSize, int* squaresColSize) {
     double totalArea = 0.0;
     double low = DBL_MAX, high = 0.0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < squaresSize; i++) {
         double y = squares[i][1];
         double l = squares[i][2];
+
         totalArea += l * l;
         if (y < low) low = y;
         if (y + l > high) high = y + l;
@@ -537,10 +500,9 @@ double separateSquares(int squares[][3], int n) {
 
     double target = totalArea / 2.0;
 
-    // Binary search
     for (int i = 0; i < 80; i++) {
         double mid = (low + high) / 2.0;
-        double below = areaBelow(mid, squares, n);
+        double below = areaBelow(mid, squares, squaresSize);
 
         if (below < target) {
             low = mid;
@@ -551,20 +513,14 @@ double separateSquares(int squares[][3], int n) {
 
     return low;
 }
+```
 
-int main() {
-    int squares1[][3] = {{0, 0, 1}, {2, 2, 1}};
-    printf("%.5f\n", separateSquares(squares1, 2));
+---
 
-    int squares2[][3] = {{0, 0, 2}, {1, 1, 1}};
-    printf("%.5f\n", separateSquares(squares2, 2));
+---
 
-    return 0;
-}
+---
 
-▶ How to Run
-gcc separate_squares.c -o separate_squares
-./separate_squares
 
 
 
