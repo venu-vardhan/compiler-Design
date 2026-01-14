@@ -515,7 +515,189 @@ double separateSquares(int** squares, int squaresSize, int* squaresColSize) {
 }
 ```
 
+-
+
 ---
+
+````md
+# Equal Area Horizontal Line – C Implementation
+
+## 📘 Problem Description
+
+You are given a 2D integer array `squares`, where each  
+`squares[i] = [xi, yi, li]` represents a **square** with:
+
+- Bottom-left corner at `(xi, yi)`
+- Side length `li`
+- Sides parallel to the x-axis
+
+### 🎯 Objective
+
+Find the **minimum y-coordinate** of a horizontal line such that:
+
+- Area of the **union of squares above the line**
+- Equals the **area of the union of squares below the line**
+
+> ⚠️ Overlapping areas must be counted **only once**.
+
+The answer is accepted if it is within `1e-5` of the correct value.
+
+---
+
+## 🧠 Approach Summary
+
+1. **Union Area Calculation**
+   - Use **Sweep Line Algorithm**
+   - Merge overlapping x-intervals
+2. **Binary Search on y**
+   - Area below y is monotonic
+   - Search for y where area below = total / 2
+3. **Precision**
+   - Binary search with 60 iterations (~1e-6 accuracy)
+
+---
+
+## ⏱️ Time Complexity
+
+- Union Area: `O(n log n)`
+- Binary Search: `~60` iterations  
+- **Total:** `O(n log n × log precision)`
+
+---
+
+## 💻 C Implementation
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define ITER 60
+
+typedef struct {
+    double y;
+    int type;          // +1 = add interval, -1 = remove interval
+    double x1, x2;
+} Event;
+
+/* Sort events by y */
+int cmpEvent(const void *a, const void *b) {
+    double d = ((Event *)a)->y - ((Event *)b)->y;
+    return (d > 0) - (d < 0);
+}
+
+/* Sort doubles */
+int cmpDouble(const void *a, const void *b) {
+    double d = (*(double *)a) - (*(double *)b);
+    return (d > 0) - (d < 0);
+}
+
+/* Compute union length of x-intervals */
+double unionX(double *x, int *cnt, int n) {
+    double length = 0, prev = 0;
+    int cover = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (cover > 0) {
+            length += x[i] - prev;
+        }
+        cover += cnt[i];
+        prev = x[i];
+    }
+    return length;
+}
+
+/* Compute union area below Y */
+double unionArea(int **squares, int n, double Y) {
+    Event *events = malloc(sizeof(Event) * 2 * n);
+    int m = 0;
+
+    for (int i = 0; i < n; i++) {
+        double x1 = squares[i][0];
+        double x2 = squares[i][0] + squares[i][2];
+        double y1 = squares[i][1];
+        double y2 = fmin(squares[i][1] + squares[i][2], Y);
+
+        if (y2 <= y1) continue;
+
+        events[m++] = (Event){y1, +1, x1, x2};
+        events[m++] = (Event){y2, -1, x1, x2};
+    }
+
+    qsort(events, m, sizeof(Event), cmpEvent);
+
+    double *xs = malloc(sizeof(double) * 2 * m);
+    int *cnt = malloc(sizeof(int) * 2 * m);
+    int xsSize = 0;
+
+    double area = 0;
+    double prevY = events[0].y;
+
+    for (int i = 0; i < m; ) {
+        double curY = events[i].y;
+        area += unionX(xs, cnt, xsSize) * (curY - prevY);
+
+        while (i < m && events[i].y == curY) {
+            xs[xsSize] = events[i].x1;
+            cnt[xsSize++] = events[i].type;
+
+            xs[xsSize] = events[i].x2;
+            cnt[xsSize++] = -events[i].type;
+            i++;
+        }
+
+        qsort(xs, xsSize, sizeof(double), cmpDouble);
+        prevY = curY;
+    }
+
+    free(events);
+    free(xs);
+    free(cnt);
+
+    return area;
+}
+
+/* Main API */
+double separateSquares(int **squares, int squaresSize) {
+    double low = 1e18, high = 0;
+
+    for (int i = 0; i < squaresSize; i++) {
+        low = fmin(low, squares[i][1]);
+        high = fmax(high, squares[i][1] + squares[i][2]);
+    }
+
+    double totalArea = unionArea(squares, squaresSize, high);
+    double half = totalArea / 2.0;
+
+    for (int i = 0; i < ITER; i++) {
+        double mid = (low + high) / 2;
+        if (unionArea(squares, squaresSize, mid) < half)
+            low = mid;
+        else
+            high = mid;
+    }
+
+    return low;
+}
+````
+
+---
+
+## 🧪 Example
+
+### Input
+
+```
+[[0,0,2],[1,1,1]]
+```
+
+### Output
+
+```
+1.00000
+```
+
+
 
 ---
 
