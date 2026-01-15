@@ -696,7 +696,109 @@ double separateSquares(int **squares, int squaresSize) {
 ```
 1.00000
 ```
+🟦 Maximum Square Hole in a Grid (C Program)
 
+This program calculates the maximum possible square hole area that can be formed in a grid after removing some horizontal and vertical bars.
+
+📌 Problem Overview
+
+You are given:
+
+n horizontal bars and m vertical bars
+
+Arrays hBars[] and vBars[] representing removed bars
+
+The goal is to determine the largest square hole area that can be formed after removing consecutive bars.
+
+🛠️ Approach
+
+Sort the removed bars using qsort.
+
+Find the longest consecutive sequence of removed bars.
+
+The gap size = longest consecutive bars + 1.
+
+The largest square side is the minimum of horizontal and vertical gaps.
+
+Square area = side × side.
+
+💻 C Program Implementation
+#include <stdio.h>
+#include <stdlib.h>
+
+/* Comparator for qsort */
+int cmp(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+/* Function to find the maximum gap after removing bars */
+int maxGap(int *bars, int size) {
+    qsort(bars, size, sizeof(int), cmp);
+
+    int longest = 1;
+    int current = 1;
+
+    for (int i = 1; i < size; i++) {
+        if (bars[i] == bars[i - 1] + 1) {
+            current++;
+        } else {
+            if (current > longest)
+                longest = current;
+            current = 1;
+        }
+    }
+
+    if (current > longest)
+        longest = current;
+
+    return longest + 1;   // gap size = bars + 1
+}
+
+/* Main logic */
+int maxSquareHole(int n, int m, int *hBars, int hSize, int *vBars, int vSize) {
+    int maxHGap = maxGap(hBars, hSize);
+    int maxVGap = maxGap(vBars, vSize);
+
+    int side = maxHGap < maxVGap ? maxHGap : maxVGap;
+    return side * side;
+}
+
+/* Example usage */
+int main() {
+    int n = 2, m = 1;
+    int hBars[] = {2, 3};
+    int vBars[] = {2};
+
+    int result = maxSquareHole(n, m, hBars, 2, vBars, 1);
+    printf("Maximum square hole area = %d\n", result);
+
+    return 0;
+}
+
+▶️ Sample Output
+Maximum square hole area = 4
+
+🧪 Example Explanation
+
+Removed horizontal bars: {2, 3} → longest sequence = 2 → gap = 3
+
+Removed vertical bars: {2} → longest sequence = 1 → gap = 2
+
+Square side = min(3, 2) = 2
+
+Area = 2 × 2 = 4
+
+📚 Concepts Used
+
+Arrays
+
+Sorting using qsort
+
+Pointer manipulation
+
+Greedy logic
+
+Time complexity: O(n log n)
 
 
 ---
