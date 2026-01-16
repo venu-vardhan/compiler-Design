@@ -289,6 +289,113 @@ int maxSquareHole(int* hBars, int hSize, int* vBars, int vSize) {
     return side * side;
 }
 ```
+# 🟦 Maximum Square Area by Removing Fences (C Implementation)
+
+## 📌 Problem Statement
+
+You are given a rectangular field of size **(m − 1) × (n − 1)** with horizontal and vertical fences.
+
+- Horizontal fences are placed at positions given in `hFences`
+- Vertical fences are placed at positions given in `vFences`
+- The outer boundary fences **cannot be removed**
+
+You may remove some internal fences to form a **square field**.
+
+### 🎯 Objective
+Return the **maximum possible area of a square** that can be formed, or `-1` if it is impossible.
+
+> Since the answer may be large, return it modulo **10⁹ + 7**
+
+---
+
+## 🧠 Approach
+
+1. Add **boundary fences** at positions:
+   - Horizontal → `1` and `m`
+   - Vertical → `1` and `n`
+
+2. Sort all fence positions.
+
+3. Compute **all possible distances (gaps)** between pairs of:
+   - Horizontal fences
+   - Vertical fences
+
+4. A square is possible if the **same distance exists in both directions**.
+
+5. Choose the **maximum common distance**, square it, and return modulo `10⁹ + 7`.
+
+---
+
+## ✅ C Implementation
+
+```c
+#include <stdlib.h>
+
+#define MOD 1000000007LL
+
+// Comparator for sorting
+int cmp(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int maximizeSquareArea(int m, int n,
+                       int* hFences, int hFencesSize,
+                       int* vFences, int vFencesSize) {
+
+    // Include boundary fences
+    int hSize = hFencesSize + 2;
+    int vSize = vFencesSize + 2;
+
+    int* h = (int*)malloc(hSize * sizeof(int));
+    int* v = (int*)malloc(vSize * sizeof(int));
+
+    h[0] = 1;
+    h[1] = m;
+    for (int i = 0; i < hFencesSize; i++)
+        h[i + 2] = hFences[i];
+
+    v[0] = 1;
+    v[1] = n;
+    for (int i = 0; i < vFencesSize; i++)
+        v[i + 2] = vFences[i];
+
+    // Sort fences
+    qsort(h, hSize, sizeof(int), cmp);
+    qsort(v, vSize, sizeof(int), cmp);
+
+    // Store all horizontal gaps
+    int maxHGaps = hSize * hSize;
+    long long* hGaps = (long long*)malloc(maxHGaps * sizeof(long long));
+    int hGapCount = 0;
+
+    for (int i = 0; i < hSize; i++) {
+        for (int j = i + 1; j < hSize; j++) {
+            hGaps[hGapCount++] = (long long)(h[j] - h[i]);
+        }
+    }
+
+    // Find maximum common square side
+    long long maxSide = 0;
+    for (int i = 0; i < vSize; i++) {
+        for (int j = i + 1; j < vSize; j++) {
+            long long vGap = (long long)(v[j] - v[i]);
+            for (int k = 0; k < hGapCount; k++) {
+                if (hGaps[k] == vGap && vGap > maxSide) {
+                    maxSide = vGap;
+                }
+            }
+        }
+    }
+
+    free(h);
+    free(v);
+    free(hGaps);
+
+    if (maxSide == 0)
+        return -1;
+
+    return (int)((maxSide * maxSide) % MOD);
+}
 
 ---
 
