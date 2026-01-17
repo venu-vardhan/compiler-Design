@@ -398,6 +398,85 @@ int maximizeSquareArea(int m, int n,
 }
 
 ---
+# 🟦 Maximum Square Area in Intersecting Rectangles (C)
+
+This repository contains a **C implementation** to solve the problem of finding the **maximum area of a square** that can fit inside the **intersection of at least two rectangles** in a 2D plane.
+
+All rectangles are **axis-aligned** (edges parallel to X and Y axes).
+
+---
+
+## 📘 Problem Statement
+
+You are given:
+- `bottomLeft[i] = [ai, bi]` → bottom-left corner of the *i-th* rectangle  
+- `topRight[i] = [ci, di]` → top-right corner of the *i-th* rectangle  
+
+Your task is to:
+- Find the **largest square** that can fit completely inside the **intersection region of at least two rectangles**
+- Return the **maximum square area**
+- If **no rectangles intersect**, return `0`
+
+---
+
+## 🧠 Approach
+
+1. Consider **every pair of rectangles**
+2. Compute their **intersection rectangle**
+3. If the intersection exists:
+   - Width = `min(x2) - max(x1)`
+   - Height = `min(y2) - max(y1)`
+4. The **maximum square side** = `min(width, height)`
+5. Square area = `side × side`
+6. Keep track of the **maximum area found**
+
+---
+
+## ⏱️ Complexity Analysis
+
+| Type | Complexity |
+|-----|------------|
+| Time | **O(n²)** |
+| Space | **O(1)** |
+
+> Efficient enough since `n ≤ 1000`
+
+---
+
+## ✅ C Implementation
+
+```c
+#include <stdio.h>
+
+int maxSquareArea(int** bottomLeft, int bottomLeftSize, int* bottomLeftColSize,
+                  int** topRight, int topRightSize, int* topRightColSize) {
+
+    int maxArea = 0;
+
+    for (int i = 0; i < bottomLeftSize; i++) {
+        for (int j = i + 1; j < bottomLeftSize; j++) {
+
+            int xLeft   = bottomLeft[i][0] > bottomLeft[j][0] ? bottomLeft[i][0] : bottomLeft[j][0];
+            int yBottom = bottomLeft[i][1] > bottomLeft[j][1] ? bottomLeft[i][1] : bottomLeft[j][1];
+            int xRight  = topRight[i][0]  < topRight[j][0]  ? topRight[i][0]  : topRight[j][0];
+            int yTop    = topRight[i][1]  < topRight[j][1]  ? topRight[i][1]  : topRight[j][1];
+
+            int width  = xRight - xLeft;
+            int height = yTop - yBottom;
+
+            if (width > 0 && height > 0) {
+                int side = width < height ? width : height;
+                int area = side * side;
+
+                if (area > maxArea)
+                    maxArea = area;
+            }
+        }
+    }
+
+    return maxArea;
+}
+
 
 ## 📚 Concepts Covered
 
