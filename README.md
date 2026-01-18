@@ -611,6 +611,177 @@ int largestMagicSquare(int **grid, int m, int n) {
 
     return 1;
 }
+Below is a **ready-to-use `README.md`** for the **C implementation of Largest Magic Square** you asked for.
+You can **directly paste this into your GitHub repository**.
+
+---
+
+````md
+# 🔮 Largest Magic Square in a Grid (C Implementation)
+
+This repository contains an **optimized C solution** to find the **largest magic square** inside a given `m × n` integer grid.
+
+A **magic square** is a square subgrid where:
+- The sum of **each row** is equal
+- The sum of **each column** is equal
+- The sums of **both diagonals** are equal
+
+📌 The numbers **do not need to be distinct**  
+📌 Every **1 × 1** square is trivially a magic square
+
+---
+
+## 📥 Problem Statement
+
+Given an integer grid of size `m × n`, determine the **largest possible size `k`** such that a `k × k` magic square exists within the grid.
+
+---
+
+## 🧠 Solution Strategy
+
+To efficiently solve the problem, we use **prefix sums** to compute row, column, and diagonal sums in **O(1)** time.
+
+### Prefix Sums Used
+- **Row prefix sum**
+- **Column prefix sum**
+- **Main diagonal prefix sum**
+- **Anti-diagonal prefix sum**
+
+This avoids recomputing sums repeatedly and significantly improves performance.
+
+---
+
+## 🚀 Algorithm Steps
+
+1. Precompute all prefix sums
+2. Try square sizes from **largest to smallest**
+3. For each possible subgrid:
+   - Check all row sums
+   - Check all column sums
+   - Check both diagonals
+4. Return the first valid (largest) size found
+5. If none found, return **1**
+
+---
+
+## ⏱ Time & Space Complexity
+
+- **Time Complexity:**  
+  `O(m × n × min(m, n))`
+
+- **Space Complexity:**  
+  `O(m × n)` (for prefix sum arrays)
+
+This works efficiently under the constraint `1 ≤ m, n ≤ 50`.
+
+---
+
+## 🧾 C Implementation
+
+```c
+#include <stdio.h>
+#include <stdbool.h>
+
+int min(int a, int b) {
+    return a < b ? a : b;
+}
+
+/* Check whether k x k square starting at (x, y) is magic */
+bool isMagic(int **grid, int **row, int **col,
+             int **diag1, int **diag2,
+             int x, int y, int k) {
+
+    int target = row[x][y + k] - row[x][y];
+
+    // Check all rows
+    for (int i = x; i < x + k; i++) {
+        if (row[i][y + k] - row[i][y] != target)
+            return false;
+    }
+
+    // Check all columns
+    for (int j = y; j < y + k; j++) {
+        if (col[x + k][j] - col[x][j] != target)
+            return false;
+    }
+
+    // Check main diagonal
+    if (diag1[x + k][y + k] - diag1[x][y] != target)
+        return false;
+
+    // Check anti-diagonal
+    if (diag2[x + k][y] - diag2[x][y + k] != target)
+        return false;
+
+    return true;
+}
+
+int largestMagicSquare(int **grid, int m, int n) {
+
+    int row[m][n + 1];
+    int col[m + 1][n];
+    int diag1[m + 1][n + 1];
+    int diag2[m + 1][n + 2];
+
+    // Build prefix sums
+    for (int i = 0; i < m; i++) {
+        row[i][0] = 0;
+        for (int j = 0; j < n; j++) {
+            row[i][j + 1] = row[i][j] + grid[i][j];
+            col[i + 1][j] = col[i][j] + grid[i][j];
+            diag1[i + 1][j + 1] = diag1[i][j] + grid[i][j];
+            diag2[i + 1][j] = diag2[i][j + 1] + grid[i][j];
+        }
+    }
+
+    // Try all possible sizes
+    for (int k = min(m, n); k >= 2; k--) {
+        for (int i = 0; i + k <= m; i++) {
+            for (int j = 0; j + k <= n; j++) {
+                if (isMagic(grid,
+                            (int **)row,
+                            (int **)col,
+                            (int **)diag1,
+                            (int **)diag2,
+                            i, j, k)) {
+                    return k;
+                }
+            }
+        }
+    }
+
+    return 1;
+}
+````
+
+---
+
+## 🧪 Example
+
+**Input**
+
+```
+grid = [[7,1,4,5,6],
+        [2,5,1,6,4],
+        [1,5,4,3,2],
+        [1,2,7,3,4]]
+```
+
+**Output**
+
+```
+3
+```
+
+---
+
+## 🎯 Key Takeaways
+
+* Prefix sums drastically reduce computation time
+* Clean separation of logic improves readability
+* Ideal for **interviews, competitive programming, and exams**
+
+---
 
 
 ## 📚 Concepts Covered
