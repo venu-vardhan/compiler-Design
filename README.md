@@ -782,6 +782,115 @@ grid = [[7,1,4,5,6],
 * Ideal for **interviews, competitive programming, and exams**
 
 ---
+# 📐 Maximum Side Length of a Square (C)
+
+This problem finds the **largest possible square submatrix** whose **sum of elements is less than or equal to a given threshold**.
+
+It is solved efficiently using **2D Prefix Sum + Binary Search**.
+
+---
+
+## 🧠 Problem Summary
+
+Given:
+- A matrix `mat` of size `m × n`
+- An integer `threshold`
+
+Return the **maximum side length `k`** of a `k × k` square such that the **sum of its elements ≤ threshold**.
+
+---
+
+## ⚙️ Efficient Approach
+
+### 1️⃣ Prefix Sum (2D)
+Allows calculation of any submatrix sum in **O(1)** time.
+
+### 2️⃣ Binary Search on Side Length
+- Search between `0` and `min(m, n)`
+- If a square of size `k` is possible → try larger
+- Otherwise → try smaller
+
+---
+
+## ⏱ Complexity
+
+| Type | Complexity |
+|----|----|
+| Time | `O(m × n × log(min(m,n)))` |
+| Space | `O(m × n)` |
+
+---
+
+## ✅ C Implementation (LeetCode Compatible)
+
+> ✔️ Matches LeetCode’s required function signature  
+> ✔️ No warnings or runtime errors  
+> ✔️ Memory-safe
+
+```c
+#include <stdlib.h>
+
+/* Check if any k x k square exists with sum <= threshold */
+int existsSquare(int **prefix, int m, int n, int k, int threshold) {
+    for (int i = 0; i <= m - k; i++) {
+        for (int j = 0; j <= n - k; j++) {
+            int sum =
+                prefix[i + k][j + k]
+              - prefix[i][j + k]
+              - prefix[i + k][j]
+              + prefix[i][j];
+
+            if (sum <= threshold)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+/* LeetCode required function signature */
+int maxSideLength(int **mat, int matSize, int *matColSize, int threshold) {
+    int m = matSize;
+    int n = matColSize[0];
+
+    /* Allocate prefix sum matrix */
+    int **prefix = (int **)malloc((m + 1) * sizeof(int *));
+    for (int i = 0; i <= m; i++) {
+        prefix[i] = (int *)calloc(n + 1, sizeof(int));
+    }
+
+    /* Build prefix sum */
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            prefix[i][j] = mat[i - 1][j - 1]
+                         + prefix[i - 1][j]
+                         + prefix[i][j - 1]
+                         - prefix[i - 1][j - 1];
+        }
+    }
+
+    /* Binary search on square size */
+    int left = 0, right = (m < n ? m : n), ans = 0;
+
+    while (left <= right) {
+        int mid = (left + right) / 2;
+
+        if (existsSquare(prefix, m, n, mid, threshold)) {
+            ans = mid;
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    /* Free memory */
+    for (int i = 0; i <= m; i++) {
+        free(prefix[i]);
+    }
+    free(prefix);
+
+    return ans;
+}
+
 
 
 ## 📚 Concepts Covered
