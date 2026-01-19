@@ -890,7 +890,15 @@ int maxSideLength(int **mat, int matSize, int *matColSize, int threshold) {
 
     return ans;
 }
+--------
 
+##Key Takeaways
+
+Prefix sums are powerful for submatrix problems
+
+Binary search on the answer reduces complexity drastically
+
+Always match LeetCode C function signatures
 
 
 ## 📚 Concepts Covered
