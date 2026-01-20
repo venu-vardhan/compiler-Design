@@ -901,6 +901,115 @@ Binary search on the answer reduces complexity drastically
 Always match LeetCode C function signatures
 
 
+-----
+# 🔢 Minimum Bitwise Array (Correct C Solution)
+
+## 📘 Problem Statement
+
+You are given an array `nums` consisting of **prime integers**.
+
+You must construct an array `ans` of the same length such that for every index `i`:
+
+```
+ans[i] OR (ans[i] + 1) == nums[i]
+```
+
+### Rules
+- Each `ans[i]` must be **minimum possible**
+- If no such value exists, set `ans[i] = -1`
+- The returned array must be dynamically allocated
+
+---
+
+## 🧠 Key Bitwise Insight (Correct Logic)
+
+1. `x OR (x + 1)` is **always odd**
+   - If `nums[i]` is **even**, the answer is **impossible**
+
+2. For **odd** `nums[i] = k`:
+   - Count the number of **trailing 1s** in binary representation of `k`
+   - Let this count be `t`
+   - The minimum valid answer is:
+
+```
+ans[i] = k - 2^(t - 1)
+```
+
+This ensures:
+```
+ans[i] | (ans[i] + 1) == k
+```
+
+---
+
+## 🧮 Example
+
+| nums[i] | Binary | Trailing 1s | ans[i] | ans[i] OR (ans[i]+1) |
+|--------|--------|-------------|--------|----------------------|
+| 2      | 10     | —           | -1     | — |
+| 3      | 11     | 2           | 1      | 3 |
+| 5      | 101    | 1           | 4      | 5 |
+| 7      | 111    | 3           | 3      | 7 |
+| 11     | 1011   | 2           | 9      | 11 |
+
+---
+
+## 🧾 Correct C Implementation
+
+```c
+#include <stdlib.h>
+
+/**
+ * Note: The returned array must be malloced,
+ * assume caller calls free().
+ */
+int* minBitwiseArray(int* nums, int numsSize, int* returnSize) {
+    int* ans = (int*)malloc(numsSize * sizeof(int));
+    *returnSize = numsSize;
+
+    for (int i = 0; i < numsSize; i++) {
+        int k = nums[i];
+
+        // Even numbers cannot satisfy the condition
+        if ((k & 1) == 0) {
+            ans[i] = -1;
+            continue;
+        }
+
+        // Count trailing 1s
+        int t = 0;
+        while (((k >> t) & 1) == 1) {
+            t++;
+        }
+
+        // Minimum valid value
+        ans[i] = k - (1 << (t - 1));
+    }
+
+    return ans;
+}
+```
+
+---
+
+## ⏱ Time & Space Complexity
+
+- **Time Complexity:** `O(n × log k)`
+- **Space Complexity:** `O(n)` (output array only)
+
+---
+
+## ✅ Submission Ready
+
+- ✔ Passes all test cases
+- ✔ Minimal value guaranteed
+- ✔ Safe memory allocation
+- ✔ LeetCode compatible
+
+---
+
+🚀 Happy Coding!
+
 ## 📚 Concepts Covered
 
 * Arrays & Sorting
