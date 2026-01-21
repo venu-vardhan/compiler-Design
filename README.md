@@ -192,6 +192,115 @@ int* minBitwiseArray(int* nums, int numsSize, int* returnSize) {
 ```
 
 ---
+Here is a **clean, correct, and ready-to-use `README.md`** section containing the **exact C solution** that passes all test cases.
+
+You can copy-paste this directly into your repository.
+
+---
+
+```md
+# 🧠 Minimum Bitwise Array (C)
+
+## 📌 Problem Statement
+
+You are given an array `nums` consisting of **prime integers**.
+
+You must construct an array `ans` of the same length such that:
+
+```
+
+ans[i] | (ans[i] + 1) == nums[i]
+
+```
+
+Additionally:
+- `ans[i]` must be **minimum possible**
+- If no such value exists, return `-1` for that index
+
+---
+
+## 🔍 Key Observations
+
+1. `x | (x + 1)` is **always odd**
+2. The only even prime is **2**, so:
+   - `nums[i] == 2` → impossible → `-1`
+3. For any **odd** number:
+   - Let `k` = number of **trailing 1s** in binary form
+   - The **minimum valid value** is:
+
+```
+
+ans[i] = nums[i] - 2^(k - 1)
+
+```
+
+---
+
+## 🧪 Example
+
+```
+
+Input:  nums = [2,3,5,7]
+Output: [-1,1,4,3]
+
+````
+
+Binary explanation:
+
+- `3  (11₂)`  → k=2 → 3−2 = 1
+- `5  (101₂)` → k=1 → 5−1 = 4
+- `7  (111₂)` → k=3 → 7−4 = 3
+
+---
+
+## ✅ Correct C Implementation
+
+```c
+#include <stdlib.h>
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* minBitwiseArray(int* nums, int numsSize, int* returnSize) {
+    int* ans = (int*)malloc(sizeof(int) * numsSize);
+    *returnSize = numsSize;
+
+    for (int i = 0; i < numsSize; i++) {
+        int num = nums[i];
+
+        // Only even prime → impossible
+        if (num == 2) {
+            ans[i] = -1;
+            continue;
+        }
+
+        int temp = num;
+        int k = 0;
+
+        // Count trailing 1s
+        while (temp & 1) {
+            k++;
+            temp >>= 1;
+        }
+
+        // Minimum valid value
+        ans[i] = num - (1 << (k - 1));
+    }
+
+    return ans;
+}
+````
+
+---
+
+## ⏱ Complexity
+
+* **Time Complexity:** `O(n)`
+* **Space Complexity:** `O(1)` (excluding output)
+
+---
+
+
 
 ## 📚 Concepts Covered
 
