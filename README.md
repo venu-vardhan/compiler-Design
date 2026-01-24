@@ -2,12 +2,15 @@
 # 📘 Compiler Design & C Programming Problems
 
 Welcome to the **Compiler Design & Data Structures** repository 👋  
-This repository contains **clear, exam-oriented C implementations** of frequently asked **algorithmic and data-structure problems**.
+This repository contains **clean, exam-oriented C implementations** of frequently asked **algorithmic and data-structure problems**, written with clarity and correctness in mind.
 
-### Ideal for:
-- 📚 University exams  
+---
+
+## 🎯 Ideal For
+
+- 📚 University & semester exams  
 - 🧠 Concept revision  
-- 💻 Coding interview practice  
+- 💻 Coding interview preparation  
 - 🧪 Competitive programming foundations  
 
 ---
@@ -17,7 +20,7 @@ This repository contains **clear, exam-oriented C implementations** of frequentl
 - Fundamental C Programs  
 - Array & Math Problems  
 - Greedy Algorithms  
-- Dynamic Programming  
+- Bit Manipulation  
 - Stack-based Algorithms  
 - Binary Tree Problems  
 - Geometry & Simulation Problems  
@@ -25,6 +28,9 @@ This repository contains **clear, exam-oriented C implementations** of frequentl
 ---
 
 ## 🧮 Sum of Odd and Even Numbers (C)
+
+### 📌 Description
+Reads `n` integers and calculates the sum of even and odd numbers separately.
 
 ```c
 #include <stdio.h>
@@ -54,6 +60,10 @@ int main() {
 
 ## 🔢 Two Sum Problem (C)
 
+### 📌 Description
+
+Checks whether any two elements in the array sum to a given target.
+
 ```c
 #include <stdbool.h>
 #include <stdio.h>
@@ -80,6 +90,10 @@ int main() {
 
 ## 🔁 Palindrome Number (C)
 
+### 📌 Description
+
+Determines whether a given integer is a palindrome.
+
 ```c
 #include <stdbool.h>
 
@@ -99,6 +113,10 @@ bool isPalindrome(int x) {
 
 ## 🌲 Maximum Level Sum of a Binary Tree (C)
 
+### 📌 Description
+
+Finds the level of a binary tree with the maximum sum of node values.
+
 ```c
 #include <limits.h>
 
@@ -116,7 +134,8 @@ int maxLevelSum(struct TreeNode* root) {
     int level = 1, bestLevel = 1, maxSum = INT_MIN;
 
     while (front < rear) {
-        int size = rear - front, sum = 0;
+        int size = rear - front;
+        int sum = 0;
 
         for (int i = 0; i < size; i++) {
             struct TreeNode* node = queue[front++];
@@ -137,130 +156,38 @@ int maxLevelSum(struct TreeNode* root) {
 
 ---
 
-## 🔮 Largest Magic Square in a Grid (C)
+## 🔢 Minimum Bitwise Array (C)
 
-```c
-// (your largestMagicSquare implementation exactly as written)
+### 📌 Problem Statement
+
+For each `nums[i]`, find the **minimum** `ans[i]` such that:
+
 ```
+ans[i] | (ans[i] + 1) == nums[i]
+```
+
+Return `-1` if no solution exists.
 
 ---
 
-## 📐 Maximum Side Length of a Square (C)
-
-```c
-// (your maxSideLength implementation exactly as written)
-```
-
----
-
-## 🔢 Minimum Bitwise Array (Correct C Solution)
-
-### 🧠 Key Insight
+### 🧠 Key Observations
 
 * `x | (x + 1)` is always **odd**
 * Even numbers → **impossible**
-* For odd `k`, count trailing `1`s (`t`)
-* Minimum answer: `k - 2^(t - 1)`
-
-```c
-#include <stdlib.h>
-
-/**
- * Note: The returned array must be malloced,
- * assume caller calls free().
- */
-int* minBitwiseArray(int* nums, int numsSize, int* returnSize) {
-    int* ans = (int*)malloc(numsSize * sizeof(int));
-    *returnSize = numsSize;
-
-    for (int i = 0; i < numsSize; i++) {
-        int k = nums[i];
-
-        if ((k & 1) == 0) {
-            ans[i] = -1;
-            continue;
-        }
-
-        int t = 0;
-        while (((k >> t) & 1) == 1) t++;
-
-        ans[i] = k - (1 << (t - 1));
-    }
-
-    return ans;
-}
-```
-
----
-Here is a **clean, correct, and ready-to-use `README.md`** section containing the **exact C solution** that passes all test cases.
-
-You can copy-paste this directly into your repository.
-
----
-
-```md
-# 🧠 Minimum Bitwise Array (C)
-
-## 📌 Problem Statement
-
-You are given an array `nums` consisting of **prime integers**.
-
-You must construct an array `ans` of the same length such that:
+* Count trailing `1`s (`k`)
+* Minimum valid value:
 
 ```
-
-ans[i] | (ans[i] + 1) == nums[i]
-
-```
-
-Additionally:
-- `ans[i]` must be **minimum possible**
-- If no such value exists, return `-1` for that index
-
----
-
-## 🔍 Key Observations
-
-1. `x | (x + 1)` is **always odd**
-2. The only even prime is **2**, so:
-   - `nums[i] == 2` → impossible → `-1`
-3. For any **odd** number:
-   - Let `k` = number of **trailing 1s** in binary form
-   - The **minimum valid value** is:
-
-```
-
 ans[i] = nums[i] - 2^(k - 1)
-
 ```
 
 ---
 
-## 🧪 Example
-
-```
-
-Input:  nums = [2,3,5,7]
-Output: [-1,1,4,3]
-
-````
-
-Binary explanation:
-
-- `3  (11₂)`  → k=2 → 3−2 = 1
-- `5  (101₂)` → k=1 → 5−1 = 4
-- `7  (111₂)` → k=3 → 7−4 = 3
-
----
-
-## ✅ Correct C Implementation
+### ✅ C Implementation
 
 ```c
 #include <stdlib.h>
 
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
 int* minBitwiseArray(int* nums, int numsSize, int* returnSize) {
     int* ans = (int*)malloc(sizeof(int) * numsSize);
     *returnSize = numsSize;
@@ -268,156 +195,77 @@ int* minBitwiseArray(int* nums, int numsSize, int* returnSize) {
     for (int i = 0; i < numsSize; i++) {
         int num = nums[i];
 
-        // Only even prime → impossible
-        if (num == 2) {
+        if ((num & 1) == 0) {
             ans[i] = -1;
             continue;
         }
 
-        int temp = num;
         int k = 0;
+        while ((num >> k) & 1) k++;
 
-        // Count trailing 1s
-        while (temp & 1) {
-            k++;
-            temp >>= 1;
-        }
-
-        // Minimum valid value
         ans[i] = num - (1 << (k - 1));
     }
 
     return ans;
 }
-````
+```
 
 ---
 
-## ⏱ Complexity
+## 🔗 Minimize Maximum Pair Sum (C)
 
-* **Time Complexity:** `O(n)`
-* **Space Complexity:** `O(1)` (excluding output)
+### 📌 Problem Statement
 
----
-
----
-
-```md
-# Minimize Maximum Pair Sum (C Implementation)
-
-## 📌 Problem Statement
-
-You are given an integer array `nums` of even length `n`.
-
-Your task is to pair up the elements into `n / 2` pairs such that:
-- Each element is used **exactly once**
-- The **maximum pair sum** is minimized
-
-The **pair sum** of a pair `(a, b)` is defined as `a + b`.
-
-Return the **minimum possible value of the maximum pair sum** after optimally pairing the elements.
+Pair array elements such that the **maximum pair sum is minimized**.
 
 ---
 
-## 🧠 Approach (Greedy Strategy)
+### 🧠 Approach (Greedy)
 
-To minimize the maximum pair sum:
-
-1. **Sort the array**
-2. Pair the **smallest element with the largest**
-3. Move inward using two pointers
-4. Track the maximum pair sum among all pairs
-
-This strategy balances the values and prevents large numbers from forming large sums together.
+1. Sort the array
+2. Pair smallest with largest
+3. Track the maximum pair sum
 
 ---
 
-## 🧪 Example
-
-### Input
-```
-
-nums = [3, 5, 2, 3]
-
-```
-
-### After Sorting
-```
-
-[2, 3, 3, 5]
-
-```
-
-### Pairs Formed
-```
-
-(2, 5) → 7
-(3, 3) → 6
-
-```
-
-### Output
-```
-
-7
-
-````
-
----
-
-## ✅ C Implementation
+### ✅ C Implementation
 
 ```c
 #include <stdlib.h>
 
-// Comparison function for qsort
 int compare(const void* a, const void* b) {
     return (*(int*)a - *(int*)b);
 }
 
 int minPairSum(int* nums, int numsSize) {
-    // Sort the array
     qsort(nums, numsSize, sizeof(int), compare);
 
-    int left = 0;
-    int right = numsSize - 1;
+    int left = 0, right = numsSize - 1;
     int maxPairSum = 0;
 
     while (left < right) {
-        int pairSum = nums[left] + nums[right];
-        if (pairSum > maxPairSum) {
-            maxPairSum = pairSum;
-        }
+        int sum = nums[left] + nums[right];
+        if (sum > maxPairSum)
+            maxPairSum = sum;
         left++;
         right--;
     }
 
     return maxPairSum;
 }
-````
+```
 
 ---
 
-## ⏱️ Time and Space Complexity
+## ⏱ Complexity Summary
 
-| Complexity Type  | Value                           |
-| ---------------- | ------------------------------- |
-| Time Complexity  | **O(n log n)** (due to sorting) |
-| Space Complexity | **O(1)** (constant extra space) |
-
----
-
-## 🎯 Key Takeaways
-
-* Sorting helps organize the array for optimal pairing
-* Pairing smallest with largest minimizes worst-case sums
-* This is a common **greedy + two-pointer** interview pattern
+| Problem Type     | Time       | Space |
+| ---------------- | ---------- | ----- |
+| Sorting Based    | O(n log n) | O(1)  |
+| Bit Manipulation | O(n)       | O(1)  |
+| Tree Traversal   | O(n)       | O(n)  |
 
 ---
-
-
-
-
 
 ## 📚 Concepts Covered
 
@@ -425,20 +273,17 @@ int minPairSum(int* nums, int numsSize) {
 * Bit Manipulation
 * Greedy Algorithms
 * Binary Trees
-* Dynamic Programming
-* Stack-based Optimization
-* Geometry & Simulation
-* Time–Space Complexity
+* Queue-based BFS
+* Time & Space Complexity
 
 ---
 
 ## 📄 License
 
-This repository is **open-source** and intended for **learning and practice purposes**.
+This repository is **open-source** and intended purely for **learning and academic practice**.
 
-⭐ If you found this useful, **star the repository on GitHub!**
+⭐ If you find this useful, consider starring the repository.
 Happy Coding 🚀
 
 ```
 
----
