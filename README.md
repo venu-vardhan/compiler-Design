@@ -300,6 +300,123 @@ int* minBitwiseArray(int* nums, int numsSize, int* returnSize) {
 
 ---
 
+---
+
+```md
+# Minimize Maximum Pair Sum (C Implementation)
+
+## 📌 Problem Statement
+
+You are given an integer array `nums` of even length `n`.
+
+Your task is to pair up the elements into `n / 2` pairs such that:
+- Each element is used **exactly once**
+- The **maximum pair sum** is minimized
+
+The **pair sum** of a pair `(a, b)` is defined as `a + b`.
+
+Return the **minimum possible value of the maximum pair sum** after optimally pairing the elements.
+
+---
+
+## 🧠 Approach (Greedy Strategy)
+
+To minimize the maximum pair sum:
+
+1. **Sort the array**
+2. Pair the **smallest element with the largest**
+3. Move inward using two pointers
+4. Track the maximum pair sum among all pairs
+
+This strategy balances the values and prevents large numbers from forming large sums together.
+
+---
+
+## 🧪 Example
+
+### Input
+```
+
+nums = [3, 5, 2, 3]
+
+```
+
+### After Sorting
+```
+
+[2, 3, 3, 5]
+
+```
+
+### Pairs Formed
+```
+
+(2, 5) → 7
+(3, 3) → 6
+
+```
+
+### Output
+```
+
+7
+
+````
+
+---
+
+## ✅ C Implementation
+
+```c
+#include <stdlib.h>
+
+// Comparison function for qsort
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int minPairSum(int* nums, int numsSize) {
+    // Sort the array
+    qsort(nums, numsSize, sizeof(int), compare);
+
+    int left = 0;
+    int right = numsSize - 1;
+    int maxPairSum = 0;
+
+    while (left < right) {
+        int pairSum = nums[left] + nums[right];
+        if (pairSum > maxPairSum) {
+            maxPairSum = pairSum;
+        }
+        left++;
+        right--;
+    }
+
+    return maxPairSum;
+}
+````
+
+---
+
+## ⏱️ Time and Space Complexity
+
+| Complexity Type  | Value                           |
+| ---------------- | ------------------------------- |
+| Time Complexity  | **O(n log n)** (due to sorting) |
+| Space Complexity | **O(1)** (constant extra space) |
+
+---
+
+## 🎯 Key Takeaways
+
+* Sorting helps organize the array for optimal pairing
+* Pairing smallest with largest minimizes worst-case sums
+* This is a common **greedy + two-pointer** interview pattern
+
+---
+
+
+
 
 
 ## 📚 Concepts Covered
