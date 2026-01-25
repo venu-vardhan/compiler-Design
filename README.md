@@ -266,6 +266,65 @@ int minPairSum(int* nums, int numsSize) {
 | Tree Traversal   | O(n)       | O(n)  |
 
 ---
+# 📌 Minimum Difference Between k Scores (C Implementation)
+
+You are given an integer array `nums` where each element represents a student's score,  
+and an integer `k` representing the number of students to pick.
+
+Your task is to select **any `k` students** such that the **difference between the highest
+and lowest scores** among them is **minimum**.
+
+---
+
+## 🧠 Approach
+
+1. **Sort the array**
+2. Use a **sliding window of size `k`**
+3. For each window, calculate:  
+   `difference = nums[i + k - 1] - nums[i]`
+4. Return the **minimum difference**
+
+---
+
+## ⏱ Time & Space Complexity
+
+- **Time Complexity:** `O(n log n)`
+- **Space Complexity:** `O(1)`
+
+---
+
+## 💻 C Code Implementation
+
+```c
+#include <stdlib.h>
+
+// Comparator function for qsort
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int minimumDifference(int* nums, int numsSize, int k) {
+
+    // If only one student is selected
+    if (k == 1) {
+        return 0;
+    }
+
+    // Sort the array
+    qsort(nums, numsSize, sizeof(int), compare);
+
+    int minDiff = 1000000000; // large initial value
+
+    // Sliding window of size k
+    for (int i = 0; i + k - 1 < numsSize; i++) {
+        int diff = nums[i + k - 1] - nums[i];
+        if (diff < minDiff) {
+            minDiff = diff;
+        }
+    }
+
+    return minDiff;
+}
 
 ## 📚 Concepts Covered
 
