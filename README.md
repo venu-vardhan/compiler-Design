@@ -325,6 +325,24 @@ int minimumDifference(int* nums, int numsSize, int k) {
 
     return minDiff;
 }
+🧪 Example
+
+Input
+
+nums = [9,4,1,7], k = 2
+
+
+Output
+
+2
+
+✅ Key Notes
+
+Works for all valid constraints
+
+Handles edge case when k = 1
+
+Exam & interview friendly solution
 
 ## 📚 Concepts Covered
 
