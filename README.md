@@ -344,6 +344,99 @@ Handles edge case when k = 1
 
 Exam & interview friendly solution
 
+# 🔍 Minimum Absolute Difference (C Implementation)
+
+This repository contains an **efficient C solution** to the problem **“Minimum Absolute Difference”**, commonly asked in coding interviews and available on platforms like **LeetCode**.
+
+---
+
+## 📌 Problem Statement
+
+Given an array of **distinct integers**, find **all pairs of elements** that have the **minimum absolute difference** among all possible pairs.
+
+### Conditions:
+- Each pair `[a, b]` must satisfy:
+  - `a < b`
+  - Both `a` and `b` belong to the array
+  - `b - a` equals the minimum absolute difference
+- Return the result in **ascending order**
+
+---
+
+## 🧠 Key Insight
+
+After sorting the array:
+- The **minimum absolute difference** will always occur between **adjacent elements**
+- This reduces time complexity from `O(n²)` to `O(n log n)`
+
+---
+
+## ⚙️ Algorithm Steps
+
+1. Sort the array using `qsort`
+2. Find the minimum difference between adjacent elements
+3. Count how many pairs match this minimum difference
+4. Allocate memory for the result
+5. Store all valid pairs
+
+---
+
+## 💻 C Implementation
+
+```c
+#include <stdlib.h>
+
+// Comparator function for qsort
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced.
+ */
+int** minimumAbsDifference(int* arr, int arrSize, int* returnSize, int** returnColumnSizes) {
+    // Step 1: Sort the array
+    qsort(arr, arrSize, sizeof(int), compare);
+
+    // Step 2: Find minimum difference
+    int minDiff = __INT_MAX__;
+    for (int i = 1; i < arrSize; i++) {
+        int diff = arr[i] - arr[i - 1];
+        if (diff < minDiff) {
+            minDiff = diff;
+        }
+    }
+
+    // Step 3: Count valid pairs
+    int count = 0;
+    for (int i = 1; i < arrSize; i++) {
+        if (arr[i] - arr[i - 1] == minDiff) {
+            count++;
+        }
+    }
+
+    // Step 4: Allocate memory
+    *returnSize = count;
+    int** result = (int**)malloc(count * sizeof(int*));
+    *returnColumnSizes = (int*)malloc(count * sizeof(int));
+
+    // Step 5: Store result pairs
+    int index = 0;
+    for (int i = 1; i < arrSize; i++) {
+        if (arr[i] - arr[i - 1] == minDiff) {
+            result[index] = (int*)malloc(2 * sizeof(int));
+            result[index][0] = arr[i - 1];
+            result[index][1] = arr[i];
+            (*returnColumnSizes)[index] = 2;
+            index++;
+        }
+    }
+
+    return result;
+}
+
 ## 📚 Concepts Covered
 
 * Arrays & Sorting
