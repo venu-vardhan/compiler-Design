@@ -436,6 +436,43 @@ int** minimumAbsDifference(int* arr, int arrSize, int* returnSize, int** returnC
 
     return result;
 }
+Example
+Input
+arr = [4, 2, 1, 3]
+
+Output
+[[1,2], [2,3], [3,4]]
+
+⏱️ Complexity Analysis
+
+Time Complexity: O(n log n)
+
+Space Complexity: O(1) extra (excluding output)
+
+✅ Notes
+
+Fully compatible with LeetCode’s C function signature
+
+Handles negative numbers correctly
+
+Caller is responsible for freeing allocated memory
+
+🚀 Author
+
+Written in a clean, exam-oriented and interview-friendly style.
+
+Happy coding! 🎯
+
+
+---
+
+If you want, I can:
+- ✨ Enhance this README with **badges**
+- 🖼️ Add **diagram placeholders**
+- 📂 Align it with your **existing GitHub repo style**
+
+Just tell me 😄
+
 
 ## 📚 Concepts Covered
 
