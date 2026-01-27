@@ -473,6 +473,30 @@ If you want, I can:
 
 Just tell me 😄
 
+# 🔀 Minimum Cost Path with One-Time Edge Reversal (C Implementation)
+
+This problem involves finding the **minimum cost path** in a **directed weighted graph**, where **each node has a special switch** that can be used **at most once** to reverse one of its incoming edges for a single traversal.
+
+---
+
+## 📌 Problem Summary
+
+- You are given:
+  - `n` nodes labeled from `0` to `n-1`
+  - A list of directed weighted edges
+- Each node has **one switch**:
+  - When you arrive at a node `u`, you may reverse **one incoming edge**
+  - The reversed edge can be used **only once**
+  - Cost of reversed edge = `2 × original cost`
+- Goal:
+  - Find the **minimum cost** to travel from node `0` to node `n-1`
+  - Return `-1` if it is not possible
+
+---
+
+## 🧠 Key Insight
+
+For every edge:
 
 ## 📚 Concepts Covered
 
