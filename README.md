@@ -493,6 +493,147 @@ This problem involves finding the **minimum cost path** in a **directed weighted
   - Return `-1` if it is not possible
 
 ---
+We can model:
+- Normal traversal: `u → v` with cost `w`
+- Reversed traversal (using switch): `v → u` with cost `2w`
+
+👉 Since **all edge weights are positive**, the optimal path will never revisit nodes unnecessarily.  
+So, we **do not need to track switch usage separately**.
+
+This reduces the problem to a **standard Dijkstra shortest-path problem** on a transformed graph.
+
+---
+
+## ⚙️ Algorithm Used
+
+- Graph Transformation
+- Dijkstra’s Algorithm (Min Heap)
+
+---
+
+## ⏱️ Time & Space Complexity
+
+- **Time Complexity:** `O((n + m) log n)`
+- **Space Complexity:** `O(n + m)`
+
+Works efficiently for large inputs.
+
+---
+
+## ✅ C Implementation
+
+```c
+#include <limits.h>
+#include <stdlib.h>
+
+typedef struct {
+    int to;
+    int cost;
+} Edge;
+
+typedef struct {
+    Edge* edges;
+    int size;
+    int capacity;
+} AdjList;
+
+void addEdge(AdjList* adj, int to, int cost) {
+    if (adj->size == adj->capacity) {
+        adj->capacity = adj->capacity == 0 ? 4 : adj->capacity * 2;
+        adj->edges = realloc(adj->edges, adj->capacity * sizeof(Edge));
+    }
+    adj->edges[adj->size++] = (Edge){to, cost};
+}
+
+/* ---------- Min Heap ---------- */
+typedef struct {
+    int node;
+    long long dist;
+} HeapNode;
+
+typedef struct {
+    HeapNode* arr;
+    int size;
+} MinHeap;
+
+MinHeap* createHeap(int cap) {
+    MinHeap* h = malloc(sizeof(MinHeap));
+    h->arr = malloc(cap * sizeof(HeapNode));
+    h->size = 0;
+    return h;
+}
+
+void swap(HeapNode* a, HeapNode* b) {
+    HeapNode t = *a; *a = *b; *b = t;
+}
+
+void push(MinHeap* h, int node, long long dist) {
+    int i = h->size++;
+    h->arr[i] = (HeapNode){node, dist};
+    while (i > 0) {
+        int p = (i - 1) / 2;
+        if (h->arr[p].dist <= h->arr[i].dist) break;
+        swap(&h->arr[p], &h->arr[i]);
+        i = p;
+    }
+}
+
+HeapNode pop(MinHeap* h) {
+    HeapNode top = h->arr[0];
+    h->arr[0] = h->arr[--h->size];
+    int i = 0;
+    while (1) {
+        int l = 2*i + 1, r = 2*i + 2, s = i;
+        if (l < h->size && h->arr[l].dist < h->arr[s].dist) s = l;
+        if (r < h->size && h->arr[r].dist < h->arr[s].dist) s = r;
+        if (s == i) break;
+        swap(&h->arr[i], &h->arr[s]);
+        i = s;
+    }
+    return top;
+}
+
+/* ---------- Main Function ---------- */
+int minCost(int n, int** edges, int edgesSize, int* edgesColSize) {
+
+    AdjList* graph = calloc(n, sizeof(AdjList));
+
+    // Build transformed graph
+    for (int i = 0; i < edgesSize; i++) {
+        int u = edges[i][0];
+        int v = edges[i][1];
+        int w = edges[i][2];
+
+        addEdge(&graph[u], v, w);        // normal edge
+        addEdge(&graph[v], u, 2 * w);    // reversed edge (switch)
+    }
+
+    long long* dist = malloc(n * sizeof(long long));
+    for (int i = 0; i < n; i++) dist[i] = LLONG_MAX;
+    dist[0] = 0;
+
+    MinHeap* heap = createHeap(edgesSize * 2 + 5);
+    push(heap, 0, 0);
+
+    while (heap->size) {
+        HeapNode cur = pop(heap);
+        int u = cur.node;
+
+        if (cur.dist > dist[u]) continue;
+
+        for (int i = 0; i < graph[u].size; i++) {
+            Edge e = graph[u].edges[i];
+            long long nd = dist[u] + e.cost;
+            if (nd < dist[e.to]) {
+                dist[e.to] = nd;
+                push(heap, e.to, nd);
+            }
+        }
+    }
+
+    return dist[n - 1] == LLONG_MAX ? -1 : (int)dist[n - 1];
+}
+
 
 ## 🧠 Key Insight
 
