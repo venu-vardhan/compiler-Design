@@ -633,7 +633,17 @@ int minCost(int n, int** edges, int edgesSize, int* edgesColSize) {
 
     return dist[n - 1] == LLONG_MAX ? -1 : (int)dist[n - 1];
 }
+Example
 
+Input
+
+n = 4
+edges = [[0,1,3],[3,1,1],[2,3,4],[0,2,2]]
+
+
+Output
+
+5
 
 ## 🧠 Key Insight
 
