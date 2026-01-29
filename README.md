@@ -290,6 +290,121 @@ Then apply **Dijkstra’s algorithm**.
 
 ---
 
+# 🔤 Minimum Cost to Convert String (C Implementation)
+
+This repository contains a **clear and optimized C solution** for the problem  
+**“Minimum Cost to Convert String”**, a graph-based string transformation problem frequently asked in **coding interviews and university exams**.
+
+---
+
+## 📌 Problem Summary
+
+You are given:
+
+- Two strings `source` and `target` of equal length
+- Character conversion rules:
+  - `original[i] → changed[i]` with cost `cost[i]`
+- You can apply **any number of conversions**, including chaining multiple conversions
+
+### 🎯 Goal  
+Convert `source` into `target` with the **minimum total cost**, or return `-1` if it is impossible.
+
+---
+
+## 💡 Core Idea
+
+- Each lowercase character (`a` to `z`) is treated as a **node**
+- Each conversion rule acts as a **directed weighted edge**
+- We compute the **minimum cost between all character pairs**
+
+✔️ This is efficiently solved using the **Floyd–Warshall Algorithm** since there are only **26 characters**.
+
+---
+
+## 🧠 Algorithm Used
+
+### Floyd–Warshall (All-Pairs Shortest Path)
+
+1. Create a `26 × 26` distance matrix  
+2. Initialize:
+   - `dist[i][i] = 0`
+   - Others = ∞  
+3. Fill direct conversion costs  
+4. Run Floyd–Warshall to allow chained conversions  
+5. For each index `i`:
+   - Add cost of converting `source[i] → target[i]`
+   - If unreachable → return `-1`
+
+---
+
+## ⏱️ Complexity Analysis
+
+| Metric | Value |
+|------|------|
+| Time | **O(26³ + n)** |
+| Space | **O(26²)** |
+| Efficient for | `n ≤ 10⁵` |
+
+---
+
+## ✅ C Implementation
+
+```c
+#include <limits.h>
+
+#define INF 1000000000000000LL
+
+long long minimumCost(
+    char* source,
+    char* target,
+    char* original, int originalSize,
+    char* changed,  int changedSize,
+    int* cost,      int costSize
+) {
+    long long dist[26][26];
+
+    // Initialize distance matrix
+    for (int i = 0; i < 26; i++) {
+        for (int j = 0; j < 26; j++) {
+            dist[i][j] = (i == j) ? 0 : INF;
+        }
+    }
+
+    // Store minimum direct conversion costs
+    for (int i = 0; i < costSize; i++) {
+        int u = original[i] - 'a';
+        int v = changed[i] - 'a';
+        if (cost[i] < dist[u][v]) {
+            dist[u][v] = cost[i];
+        }
+    }
+
+    // Floyd–Warshall algorithm
+    for (int k = 0; k < 26; k++) {
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+
+    // Calculate total conversion cost
+    long long totalCost = 0;
+    for (int i = 0; source[i] != '\0'; i++) {
+        int s = source[i] - 'a';
+        int t = target[i] - 'a';
+
+        if (dist[s][t] == INF) {
+            return -1;
+        }
+        totalCost += dist[s][t];
+    }
+
+    return totalCost;
+}
+
 ## 📄 License
 This repository is **open-source** and intended for **learning & academic practice**.
 
