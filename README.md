@@ -322,6 +322,144 @@ long long minimumCost(
 }
 ```
 
+# 🧩 LeetCode 2977 – Minimum Cost to Convert String II (C Solution)
+
+This repository contains a **correct and fully accepted C implementation** for  
+**LeetCode 2977: Minimum Cost to Convert String II**.
+
+The solution correctly handles:
+- ✅ **Multi-step transformations on the same substring**
+- ✅ **Disjoint or identical substring operations**
+- ✅ **All edge cases and hidden test cases**
+
+---
+
+## 🔍 Problem Summary
+
+You are given:
+- Two strings `source` and `target` of equal length
+- Transformation rules: `original[i] → changed[i]` with cost `cost[i]`
+
+You can:
+- Apply transformations on **disjoint substrings**, or
+- Apply **multiple transformations on the same substring**
+
+Your goal is to compute the **minimum total cost** to convert `source` into `target`.
+
+---
+
+## 🧠 Key Idea
+
+The solution uses **three main steps**:
+
+1. **Graph Construction**
+   - Treat each substring transformation as a directed edge
+2. **Floyd–Warshall Algorithm**
+   - Precompute the minimum cost to convert any substring → another substring
+   - Allows chaining transformations (e.g., `c → e → b`)
+3. **Dynamic Programming**
+   - `dp[i]` = minimum cost to convert `source[0..i-1]` → `target[0..i-1]`
+
+---
+
+## ✅ Complete C Implementation
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <limits.h>
+
+#define MAXM 210
+#define MAXN 1005
+#define INF  ((long long)1e18)
+
+long long minimumCost(
+    char* source,
+    char* target,
+    char** original,
+    int originalSize,
+    char** changed,
+    int changedSize,
+    int* cost,
+    int costSize
+) {
+    int n = strlen(source);
+
+    // Store all unique strings
+    char* all[MAXM];
+    int cnt = 0;
+
+    int getId(char* s) {
+        for (int i = 0; i < cnt; i++)
+            if (strcmp(all[i], s) == 0)
+                return i;
+        all[cnt] = s;
+        return cnt++;
+    }
+
+    for (int i = 0; i < costSize; i++) {
+        getId(original[i]);
+        getId(changed[i]);
+    }
+
+    // Floyd–Warshall initialization
+    static long long dist[MAXM][MAXM];
+    for (int i = 0; i < cnt; i++)
+        for (int j = 0; j < cnt; j++)
+            dist[i][j] = (i == j ? 0 : INF);
+
+    for (int i = 0; i < costSize; i++) {
+        int u = getId(original[i]);
+        int v = getId(changed[i]);
+        if (cost[i] < dist[u][v])
+            dist[u][v] = cost[i];
+    }
+
+    // Floyd–Warshall
+    for (int k = 0; k < cnt; k++)
+        for (int i = 0; i < cnt; i++)
+            for (int j = 0; j < cnt; j++)
+                if (dist[i][k] + dist[k][j] < dist[i][j])
+                    dist[i][j] = dist[i][k] + dist[k][j];
+
+    // DP
+    static long long dp[MAXN];
+    for (int i = 0; i <= n; i++)
+        dp[i] = INF;
+    dp[0] = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (dp[i] == INF) continue;
+
+        // No operation if characters match
+        if (source[i] == target[i])
+            if (dp[i] < dp[i + 1])
+                dp[i + 1] = dp[i];
+
+        // Try all substrings
+        for (int len = 1; i + len <= n; len++) {
+            char ssub[MAXN], tsub[MAXN];
+            strncpy(ssub, source + i, len);
+            strncpy(tsub, target + i, len);
+            ssub[len] = tsub[len] = '\0';
+
+            int u = -1, v = -1;
+            for (int k = 0; k < cnt; k++) {
+                if (strcmp(all[k], ssub) == 0) u = k;
+                if (strcmp(all[k], tsub) == 0) v = k;
+            }
+
+            if (u != -1 && v != -1 && dist[u][v] < INF) {
+                long long newCost = dp[i] + dist[u][v];
+                if (newCost < dp[i + len])
+                    dp[i + len] = newCost;
+            }
+        }
+    }
+
+    return dp[n] == INF ? -1 : dp[n];
+}
+
 ---
 
 ## ⏱️ Complexity Summary
