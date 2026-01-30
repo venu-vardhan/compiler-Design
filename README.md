@@ -1,15 +1,16 @@
+````md
 # 📘 Compiler Design & C Programming Problems
 
 Welcome to the **Compiler Design & C Programming Problems** repository 👋  
-This repository contains **clean, exam-oriented, and interview-friendly C implementations** of frequently asked **algorithmic and data-structure problems**, written with clarity and correctness in mind.
+This repository contains **clean, exam-oriented, and interview-friendly C implementations** of frequently asked **algorithmic and data-structure problems**, written with clarity, correctness, and simplicity in mind.
 
 ---
 
 ## 🎯 Ideal For
 
-- 📚 University & semester exams  
-- 🧠 Concept revision  
-- 💻 Coding interview preparation  
+- 📚 University & semester examinations  
+- 🧠 Concept revision for Compiler Design & Data Structures  
+- 💻 Coding interview preparation (C language focus)  
 - 🧪 Competitive programming foundations  
 
 ---
@@ -22,14 +23,14 @@ This repository contains **clean, exam-oriented, and interview-friendly C implem
 - Bit Manipulation  
 - Stack-based Algorithms  
 - Binary Trees & BFS  
-- Graph Algorithms (Dijkstra)  
+- Graph Algorithms (Dijkstra, Floyd–Warshall)  
 - Geometry & Simulation  
 
 ---
 
 ## 🧮 Sum of Odd and Even Numbers (C)
 
-### 📌 Description
+### 📌 Description  
 Reads `n` integers and calculates the sum of **even** and **odd** numbers separately.
 
 ```c
@@ -51,13 +52,14 @@ int main() {
     printf("Odd Sum = %d\n", oddSum);
     return 0;
 }
-```
+````
 
 ---
 
 ## 🔢 Two Sum Problem (C)
 
 ### 📌 Description
+
 Checks whether any two array elements sum to a given target.
 
 ```c
@@ -77,6 +79,7 @@ bool twoSum(int arr[], int n, int target) {
 ## 🔁 Palindrome Number (C)
 
 ### 📌 Description
+
 Determines whether a given integer is a palindrome.
 
 ```c
@@ -99,7 +102,8 @@ bool isPalindrome(int x) {
 ## 🌲 Maximum Level Sum of a Binary Tree (C)
 
 ### 📌 Description
-Finds the level with the **maximum sum** of node values using **BFS**.
+
+Finds the level with the **maximum sum** of node values using **Breadth-First Search (BFS)**.
 
 ```c
 #include <limits.h>
@@ -142,18 +146,14 @@ int maxLevelSum(struct TreeNode* root) {
 ## 🔢 Minimum Bitwise Array (C)
 
 ### 📌 Problem
+
 For each `nums[i]`, find the **minimum** `ans[i]` such that:
 
 ```
 ans[i] | (ans[i] + 1) == nums[i]
 ```
 
-Return `-1` if no solution exists.
-
-### 🧠 Key Insight
-- Result must be **odd**
-- Count trailing `1`s
-- Compute minimum valid value
+Return `-1` if no valid value exists.
 
 ```c
 #include <stdlib.h>
@@ -202,11 +202,6 @@ int minPairSum(int* nums, int n) {
 
 ## 📌 Minimum Difference Between k Scores
 
-### 🧠 Approach
-- Sort array
-- Sliding window of size `k`
-- Track minimum difference
-
 ```c
 int minimumDifference(int* nums, int n, int k) {
     if (k == 1) return 0;
@@ -224,10 +219,9 @@ int minimumDifference(int* nums, int n, int k) {
 
 ## 🔍 Minimum Absolute Difference
 
-### 🧠 Insight
-Minimum difference occurs between **adjacent elements after sorting**.
-
 ```c
+#include <limits.h>
+
 int** minimumAbsDifference(int* arr, int n, int* returnSize, int** col) {
     qsort(arr, n, sizeof(int), cmp);
 
@@ -263,91 +257,27 @@ int** minimumAbsDifference(int* arr, int n, int* returnSize, int** col) {
 ## 🔀 Minimum Cost Path with One-Time Edge Reversal
 
 ### 🧠 Idea
-Transform each edge:
-- normal → `u → v (w)`
-- reversed → `v → u (2w)`
 
-Then apply **Dijkstra’s algorithm**.
+Each edge is transformed as:
+
+* Normal direction → cost `w`
+* Reversed direction → cost `2w`
+
+Then **Dijkstra’s Algorithm** is applied.
 
 ### ⏱ Complexity
-- Time: `O((n + m) log n)`
-- Space: `O(n + m)`
 
-✔ Efficient  
-✔ Exam-friendly  
-✔ Interview-safe  
+* Time: `O((V + E) log V)`
+* Space: `O(V + E)`
 
 ---
 
-## ⏱️ Complexity Summary
+## 🔤 Minimum Cost to Convert String (C)
 
-| Category | Time | Space |
-|--------|------|-------|
-| Sorting | O(n log n) | O(1) |
-| Trees | O(n) | O(n) |
-| Graphs | O(E log V) | O(V + E) |
-| Bit Ops | O(n) | O(1) |
+### 💡 Approach
 
----
-
-# 🔤 Minimum Cost to Convert String (C Implementation)
-
-This repository contains a **clear and optimized C solution** for the problem  
-**“Minimum Cost to Convert String”**, a graph-based string transformation problem frequently asked in **coding interviews and university exams**.
-
----
-
-## 📌 Problem Summary
-
-You are given:
-
-- Two strings `source` and `target` of equal length
-- Character conversion rules:
-  - `original[i] → changed[i]` with cost `cost[i]`
-- You can apply **any number of conversions**, including chaining multiple conversions
-
-### 🎯 Goal  
-Convert `source` into `target` with the **minimum total cost**, or return `-1` if it is impossible.
-
----
-
-## 💡 Core Idea
-
-- Each lowercase character (`a` to `z`) is treated as a **node**
-- Each conversion rule acts as a **directed weighted edge**
-- We compute the **minimum cost between all character pairs**
-
-✔️ This is efficiently solved using the **Floyd–Warshall Algorithm** since there are only **26 characters**.
-
----
-
-## 🧠 Algorithm Used
-
-### Floyd–Warshall (All-Pairs Shortest Path)
-
-1. Create a `26 × 26` distance matrix  
-2. Initialize:
-   - `dist[i][i] = 0`
-   - Others = ∞  
-3. Fill direct conversion costs  
-4. Run Floyd–Warshall to allow chained conversions  
-5. For each index `i`:
-   - Add cost of converting `source[i] → target[i]`
-   - If unreachable → return `-1`
-
----
-
-## ⏱️ Complexity Analysis
-
-| Metric | Value |
-|------|------|
-| Time | **O(26³ + n)** |
-| Space | **O(26²)** |
-| Efficient for | `n ≤ 10⁵` |
-
----
-
-## ✅ C Implementation
+* Treat characters `a–z` as graph nodes
+* Use **Floyd–Warshall Algorithm** for all-pairs shortest paths
 
 ```c
 #include <limits.h>
@@ -363,50 +293,57 @@ long long minimumCost(
 ) {
     long long dist[26][26];
 
-    // Initialize distance matrix
-    for (int i = 0; i < 26; i++) {
-        for (int j = 0; j < 26; j++) {
+    for (int i = 0; i < 26; i++)
+        for (int j = 0; j < 26; j++)
             dist[i][j] = (i == j) ? 0 : INF;
-        }
-    }
 
-    // Store minimum direct conversion costs
     for (int i = 0; i < costSize; i++) {
         int u = original[i] - 'a';
         int v = changed[i] - 'a';
-        if (cost[i] < dist[u][v]) {
+        if (cost[i] < dist[u][v])
             dist[u][v] = cost[i];
-        }
     }
 
-    // Floyd–Warshall algorithm
-    for (int k = 0; k < 26; k++) {
-        for (int i = 0; i < 26; i++) {
-            for (int j = 0; j < 26; j++) {
-                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+    for (int k = 0; k < 26; k++)
+        for (int i = 0; i < 26; i++)
+            for (int j = 0; j < 26; j++)
+                if (dist[i][k] + dist[k][j] < dist[i][j])
                     dist[i][j] = dist[i][k] + dist[k][j];
-                }
-            }
-        }
-    }
 
-    // Calculate total conversion cost
     long long totalCost = 0;
-    for (int i = 0; source[i] != '\0'; i++) {
+    for (int i = 0; source[i]; i++) {
         int s = source[i] - 'a';
         int t = target[i] - 'a';
-
-        if (dist[s][t] == INF) {
-            return -1;
-        }
+        if (dist[s][t] == INF) return -1;
         totalCost += dist[s][t];
     }
 
     return totalCost;
 }
+```
+
+---
+
+## ⏱️ Complexity Summary
+
+| Category | Time       | Space    |
+| -------- | ---------- | -------- |
+| Sorting  | O(n log n) | O(1)     |
+| Arrays   | O(n)       | O(1)     |
+| Trees    | O(n)       | O(n)     |
+| Graphs   | O(E log V) | O(V + E) |
+| Bit Ops  | O(n)       | O(1)     |
+
+---
 
 ## 📄 License
-This repository is **open-source** and intended for **learning & academic practice**.
 
-⭐ If you find this helpful, consider starring the repository.  
-Happy coding 🚀
+This repository is **open-source** and intended for **learning and academic practice**.
+
+⭐ If you find this useful, consider starring the repository.
+Happy Coding 🚀
+
+```
+
+---
+```
