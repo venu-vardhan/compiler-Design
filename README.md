@@ -461,6 +461,163 @@ long long minimumCost(
 }
 
 ---
+Here’s a **clean, exam-ready `README.md`** for the **C solution** of **Next Greatest Letter** 📘
+You can copy-paste this directly into your repo.
+
+---
+
+```md
+# 🔠 Next Greatest Letter (C Implementation)
+
+## 🧠 Problem Statement
+
+You are given a sorted array of characters `letters` and a character `target`.
+
+Your task is to **find the smallest character in the array that is lexicographically greater than `target`**.
+
+- If such a character exists, return it.
+- If it does **not** exist, return the **first character of the array** (wrap-around behavior).
+
+---
+
+## 📌 Example
+
+### Example 1
+**Input**
+```
+
+letters = ['c','f','j']
+target = 'a'
+
+```
+**Output**
+```
+
+'c'
+
+```
+
+### Example 2
+**Input**
+```
+
+letters = ['c','f','j']
+target = 'c'
+
+```
+**Output**
+```
+
+'f'
+
+```
+
+### Example 3
+**Input**
+```
+
+letters = ['x','x','y','y']
+target = 'z'
+
+```
+**Output**
+```
+
+'x'
+
+````
+
+---
+
+## 🚀 Approach: Binary Search
+
+Since the array is **sorted**, we use **Binary Search** to efficiently find the answer.
+
+### 🔎 Key Observations
+- We look for the **first character strictly greater than `target`**
+- If no such character exists, return `letters[0]`
+- Wrap-around is handled using **modulo (%)**
+
+---
+
+## 🧩 Algorithm Steps
+
+1. Initialize two pointers: `left = 0`, `right = lettersSize - 1`
+2. While `left <= right`:
+   - Calculate `mid`
+   - If `letters[mid] <= target`, move right
+   - Else, move left
+3. Return `letters[left % lettersSize]`
+
+---
+
+## 💻 C Code Implementation
+
+```c
+char nextGreatestLetter(char* letters, int lettersSize, char target) {
+    int left = 0, right = lettersSize - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (letters[mid] <= target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    // Wrap around if no character is greater than target
+    return letters[left % lettersSize];
+}
+````
+
+---
+
+## ⏱ Complexity Analysis
+
+| Metric           | Value        |
+| ---------------- | ------------ |
+| Time Complexity  | **O(log n)** |
+| Space Complexity | **O(1)**     |
+
+---
+
+## 🎯 Why Binary Search?
+
+* Efficient for large inputs
+* Works perfectly because the array is sorted
+* Meets competitive programming and interview standards
+
+---
+
+## ✅ Suitable For
+
+* 📚 University exams
+* 💻 Coding interviews
+* 🧪 LeetCode / Competitive programming
+* 📖 Data Structures revision
+
+---
+
+### 🔚 Conclusion
+
+This solution efficiently finds the **next lexicographically greater character** using binary search and handles the wrap-around case neatly.
+
+Happy Coding 🚀
+
+```
+
+---
+
+If you want, I can also:
+- add **comments for beginners**
+- convert this into a **Compiler Design / DS exam format**
+- combine multiple problems into **one master README**
+
+Just say 😄
+```
+
 
 ## ⏱️ Complexity Summary
 
