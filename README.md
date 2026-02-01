@@ -618,6 +618,155 @@ If you want, I can also:
 Just say 😄
 ```
 
+Sure 👍
+Here’s a **clean, exam-ready `README.md`** for the **C implementation** of this problem. You can directly copy-paste this into your GitHub repository.
+
+---
+
+```md
+# 📘 Minimum Cost to Divide Array into 3 Contiguous Subarrays (C)
+
+## 🧩 Problem Statement
+
+You are given an array of integers `nums` of length `n`.
+
+- The **cost of an array** is defined as the value of its **first element**.
+- You must divide `nums` into **exactly 3 disjoint contiguous subarrays**.
+
+Your task is to **return the minimum possible sum of the costs** of these three subarrays.
+
+---
+
+## 🔍 Understanding the Cost
+
+If the array is divided as:
+
+```
+
+[ 0 ... i-1 ] | [ i ... j-1 ] | [ j ... n-1 ]
+
+```
+
+Then the total cost is:
+
+```
+
+nums[0] + nums[i] + nums[j]
+
+````
+
+Where:
+- `1 ≤ i < j ≤ n-1`
+
+The first subarray **always starts at index 0**.
+
+---
+
+## 💡 Key Insight
+
+- The start of the **second subarray** must come before the start of the **third subarray**.
+- For each possible start index `j` of the third subarray, we choose the **minimum possible starting value** for the second subarray before `j`.
+
+This can be efficiently solved using a **prefix minimum** technique.
+
+---
+
+## ⚙️ Algorithm (Optimized)
+
+1. Fix the first subarray start at index `0`.
+2. Maintain the minimum value seen so far for the start of the second subarray.
+3. For each valid start `j` of the third subarray:
+   - Calculate the total cost:
+     ```
+     nums[0] + minSecond + nums[j]
+     ```
+   - Update the answer.
+4. Return the minimum cost found.
+
+---
+
+## 🧠 Example
+
+### Input
+````
+
+nums = [1, 5, 1, 5]
+
+```
+
+### Possible Splits
+
+- `[1] | [5] | [1,5]` → Cost = `1 + 5 + 1 = 7`
+- `[1] | [5,1] | [5]` → Cost = `1 + 1 + 5 = 7`
+
+### Output
+```
+
+7
+
+````
+
+---
+
+## 🧪 C Implementation
+
+```c
+#include <limits.h>
+
+int minimumCost(int* nums, int numsSize) {
+    int ans = INT_MAX;
+
+    // Minimum value for the start of the 2nd subarray
+    int minSecond = nums[1];
+
+    // j represents the start of the 3rd subarray
+    for (int j = 2; j < numsSize; j++) {
+        int cost = nums[0] + minSecond + nums[j];
+        if (cost < ans) {
+            ans = cost;
+        }
+
+        // Update prefix minimum
+        if (nums[j] < minSecond) {
+            minSecond = nums[j];
+        }
+    }
+
+    return ans;
+}
+````
+
+---
+
+## ⏱️ Complexity Analysis
+
+* **Time Complexity:** `O(n)`
+* **Space Complexity:** `O(1)`
+
+Efficient and suitable for large inputs.
+
+---
+
+## 🎯 Suitable For
+
+* 📚 University & semester exams
+* 🧠 Concept revision
+* 💻 Coding interviews
+* 🏁 Competitive programming foundations
+
+---
+
+## 📝 Conclusion
+
+By fixing the third subarray’s start and tracking the minimum possible second subarray start using a prefix minimum, we efficiently compute the minimum possible cost.
+
+---
+
+Happy Coding! 🚀
+
+``👍
+```
+
 
 ## ⏱️ Complexity Summary
 
